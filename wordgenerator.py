@@ -5,12 +5,7 @@ import numpy.random as nprnd
 import matplotlib.pyplot as plt
  
 def generateWord(l) :
-    word = 0
-    i = 0
-    while i < l :
-        word =  word + (2**i)*randint(0,1)
-        i = i + 1
-    return word    
+    return randint(1, 2**l-1)   
 
 def encodeBCHWord(word, gX, l, n) : 
     encodedWord = word 

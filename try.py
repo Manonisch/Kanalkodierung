@@ -36,8 +36,10 @@ hMatrix = dec.getMatrix(hX, n)
 print('hMatrix', hMatrix, hX, n)
 firstRow = hMatrix[:,0]
 y = np.count_nonzero(firstRow)  
-x = 3
+x = 4
 word = wg.generateWord(l)
+# ..................................................................
+#word = 76
 print('word', bin(word), word, l)
 #encoded = wg.encodeBCHWord(word, hMatrix, l, n)
 encoded = wg.encodeLDPCWord(word, gX, hMatrix, l, n)
@@ -68,7 +70,7 @@ print('si is', si)
 if sum(si) == 0 :
     print('no correction needed' , originalString, quantWord)
 else :    
-    #rj = dec.getRjHard(quantWord, y)
+    # rj = dec.getRjHard(quantWord, y)
     rj = dec.getRjSoft(quantWord, x)
     print('rj at first is', rj, y)
     # STEP: Berechne ej

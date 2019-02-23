@@ -71,7 +71,7 @@ def getRjSoft(word, x) :
         elif newbit > 1 :
             newbit = 1
         print(newbit, bit, 2**(x-1) - 1)    
-        rj.append(round(newbit * (2**(x-1) - 1), 0))
+        rj.append(-round(newbit * (2**(x-1) - 1), 0))
     print('aoftrj is', rj)
     return rj
 
