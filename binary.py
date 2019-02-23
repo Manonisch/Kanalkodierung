@@ -10,7 +10,6 @@ init()
 
 # enter polynom b and sequence a
 def bitwiseMod(a,b):
- 
     remainder = 0
     aPlus = a
     sigBitA = a.bit_length()
@@ -24,7 +23,6 @@ def bitwiseMod(a,b):
             bPlus = bPlus << shifter              
         aPlus = aPlus ^ bPlus
         sigBitA = aPlus.bit_length()
-
     remainder = aPlus
     return remainder    
     
