@@ -30,20 +30,24 @@ def bitwiseMod(a,b):
 def restpolynom(n, b) :
     r = 1  
     remainder = 0
-    print('polynom rest list is' , bin(b))
+    remainderDict = {}
+    #print('polynom rest list is for' , bin(b))
     while r <= n and remainder != 1 :
         remainder = bitwiseMod(2**r, b)
-        print ('the polynom rest for the potency alpha' , r, 'is ', green(remainder))
+        remainderDict[str(r)] = remainder    
+        #print ('the polynom rest for the potency alpha' , r, 'is ', green(remainder))
         if r == n :
             if remainder != 1 :
                 raise Exception('restpolynom r == n, but remainder != 1')
-            else :
-                print(bold_green('****************** polynom is irreduzible and primitive **********************'), b, bin(b), '\n\n')
-        else :
-            if remainder == 1 :
-                print('polynom is irreduzible', b , bin(b), 'with cycle ', r , '\n\n') 
+            #else :
+                #print(bold_green('****************** polynom is irreduzible and primitive **********************'), b, bin(b), '\n\n')
+        #else :
+            #if remainder == 1 :
+                #print('polynom is irreduzible', b , bin(b), 'with cycle ', r , '\n\n') 
             
         r = r+1
+    remainderDict['0'] = 1
+    return remainderDict
                 
 # where g is k1 und n is n    
 def testPolynoms(g, n) :
@@ -57,17 +61,17 @@ def testPolynoms(g, n) :
         remainder = bitwiseMod (2**n, polynom)
         if remainder == 1 :
             polynomlist.append(polynom)
-            print('\n', 'the polynom ', bold_green(polynom), bold_green(bin(polynom)), 'has remainder ', remainder, '\n')
+            #print('\n', 'the polynom ', bold_green(polynom), bold_green(bin(polynom)), 'has remainder ', remainder, '\n')
             
     return polynomlist 
 
 #needs k1 as g and n as n 
 def mainMod(g, n):
     listi = testPolynoms(g,n)
-    print(' \n -------------------------------- \n in GF(2^', g ,') there are ', len(listi), ' irreduzible polynoms :\n', listi, ' \n --------------------------- \n\n' ) 
+    #print(' \n -------------------------------- \n in GF(2^', g ,') there are ', len(listi), ' irreduzible polynoms :\n', listi, ' \n --------------------------- \n\n' ) 
     for polynom in listi :
-        restpolynom(n, polynom)
-    
+        rDict = restpolynom(n, polynom)
+        print(rDict)
 #Testcases    
 #mainMod(6, 63)
 

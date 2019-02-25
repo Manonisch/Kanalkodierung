@@ -1,4 +1,6 @@
-from numpy.polynomial import polynomial as P
+from numpy.polynomial import Polynomial as polly
+from binary import restpolynom  as restp
+import numpy as np
 
 def getCycles(n):
     cyclesFullList = []
@@ -20,7 +22,7 @@ def getCycles(n):
                 cyclesFullList.append(list)
         else :
             cyclealpha = cyclealpha + 1
-    print('for n:', n)
+    # print('for n:', n)
     for index in cyclesFullList :
         print(' the cycles are', index,'\n')
     return cyclesFullList
@@ -33,16 +35,17 @@ import itertools
 def getMinimalPolynoms(cycles , n, restpolynoms) :  
     minimalPolynoms = {}
     for index in cycles :
-        print('the cycle for minimalpolynom m' + str(min(index)) + '(x), is', index, restpolynoms)
+        # print('the cycle for minimalpolynom m' + str(min(index)) + '(x), is', index, restpolynoms)
         partpol = []
         # STEP: Ausmultiplizieren -> polynomal with 2 unknowns -> This is the big question
         # STEP: Zusammenfassen: if x^3*n^4+x3*n^3 -> x^3(n^4+n^3) + addieren
-        r =  range(0, len(index)+1)
-        for x in r :
+        # IDEA:  (x + n^1)(x+n^2) = x2 + xn1 + xn2 + n1n2 = x2 + x(n2+n1)+ n3
+        for x in range(0, len(index)+1) :
             comb = list(itertools.combinations(index, len(index)-x))
+            # print('is', len(index)+1, index, x, comb)            
             i = 0
             while i < len(comb) :
-                print('single is', comb[i])
+                # print('single is', comb[i])
                 val = 0
                 for nr in comb[i] :
                     val = val + nr
@@ -55,16 +58,16 @@ def getMinimalPolynoms(cycles , n, restpolynoms) :
             combInt = 0
                       
             for element in comb :
-                strElem = str(element)
-                print('elem is', element, restpolynoms[str(element)])
+                # print('power to the strElem', element, restpolynoms, comb)
+                # print('elem is', element, restpolynoms[str(element)])
                 combInt = combInt ^ restpolynoms[str(element)]
-            print(combInt, 'is combInt') 
+            # print(combInt, 'is combInt') 
 
             
             partpol.append(combInt)
 
             
-        print('partpol for m'+ str(min(index)) + '(x), is', partpol)
+        # print('partpol for m'+ str(min(index)) + '(x), is', partpol)
         
         #STEP make the list to a single minimalPolynomInteger for better safekeeping... or would it be better to keep them seperated?
         minimalInt = 0
@@ -76,13 +79,13 @@ def getMinimalPolynoms(cycles , n, restpolynoms) :
             
             minimalInt = minimalInt + 2**j * included 
             j = j + 1
-            print('minimalInt is: ', minimalInt, 'j is: ', j)
+           # print('minimalInt is: ', minimalInt, 'j is: ', j)
         
         mKey = 'm'+ str(min(index)) + '(x)'
         minimalPolynoms[mKey] = partpol
         minimalPolynoms[mKey + 'Int'] = minimalInt
         
-    print('dict of polynoms is', minimalPolynoms)
+    #print('dict of polynoms is', minimalPolynoms, 'and thats it')
     return minimalPolynoms
     
 # STEP: Gleiche streichen n^3+n^3 = 2*n^3 -> mod 2
@@ -101,9 +104,45 @@ def getMinimalPolynoms(cycles , n, restpolynoms) :
 # structure should be like: 'polynom power':'restpolynom as integer'
 
 #testcases
-restpolym = {'0':1,'1':2,'2':4,'3':3,'4':6,'5':7,'6':5,'7':8,'8':1 }
-getMinimalPolynoms([[1,2,3],[2,4,5,7]],8,restpolym)
+#restpolym = {'0':1,'1':2,'2':4,'3':3,'4':6,'5':7,'6':5,'7':8,'8':1 }
+#getMinimalPolynoms([[1,2,3],[2,4,5,7]],8,restpolym)
 
+cyclesAre = [[1,2,4,8,16,32], [3,6,12,24,48,33], [5,10,20,40,17,34], [7,14,28,56,49,35], [9,18,36], [11,22,44,25,50,37], [13,26,52,41,19,38], [15,30,60,57,51,39], [21,42],[23,46,29,58,53,43], [27, 54, 45], [31,62,61,59,55,47]]
+
+listPoly = [115, 109, 103, 97, 91, 67, ]
+gEntry = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,1]
+for item in listPoly :
+    print('MMMMMMMMMMMMMMMMMY ITEM', item)
+    restDict = restp(63,item)
+    print(restDict)
+    minimalPolynomList = getMinimalPolynoms(cyclesAre,63,restDict)
+
+    m5 = np.ravel(np.array(minimalPolynomList['m5(x)']))
+    m11 = np.ravel(np.array(minimalPolynomList['m11(x)']))
+    m15 = np.ravel(np.array(minimalPolynomList['m15(x)']))
+    m21 = np.ravel(np.array(minimalPolynomList['m21(x)']))
+    m23 = np.ravel(np.array(minimalPolynomList['m23(x)']))
+    m31 = np.ravel(np.array(minimalPolynomList['m31(x)']))
+    a = polly([1,2,3, 1, 1])
+    ar = np.array(a)
+    # print('m5 is', m5,'m11 is', m11,'m15 is', m15,'m21 is', m21,'m23 is', m23,'m31 is', m31, 'and then', minimalPolynomList['m5(x)'], a, a*a, ar)
+    gX = m5
+    lister = [m11,m15,m21,m23, m31]
+    for elem in lister :
+        gX = np.convolve(gX, elem)
+        #print(gX)
+    #print('gX is', gX)
+
+    gXReal = []
+    for elem in gX :
+        # print(elem)
+        e = elem % 2
+        gXReal.append(e)
+        
+    print('gX is', gX, gXReal)   
+    if gEntry == gXReal :
+        print('we have a winner', gEntry, gXReal)
+    
 #getCycles(56)    
 #getCycles(25)   
 #getCycles(63)
@@ -111,4 +150,4 @@ getMinimalPolynoms([[1,2,3],[2,4,5,7]],8,restpolym)
 #testcases
 a = (1,1)
 b = (1,1)
-print(P.polymul(a,b)) 
+#print(poly.polymul(a,b)) 
