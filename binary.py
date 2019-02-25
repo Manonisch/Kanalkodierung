@@ -35,7 +35,7 @@ def restpolynom(n, b) :
     while r <= n and remainder != 1 :
         remainder = bitwiseMod(2**r, b)
         remainderDict[str(r)] = remainder    
-        #print ('the polynom rest for the potency alpha' , r, 'is ', green(remainder))
+        print ('the polynom rest for the potency alpha' , r, 'is ', green(format(remainder, 'b')))
         if r == n :
             if remainder != 1 :
                 raise Exception('restpolynom r == n, but remainder != 1')

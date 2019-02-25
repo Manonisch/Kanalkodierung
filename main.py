@@ -3,6 +3,7 @@ import binary
 import wordgenerator as wg
 import decoder as dec
 import matplotlib.pyplot as plt
+import random
 
 #n = 15
 #l = 7
@@ -16,7 +17,7 @@ r = l/n
 hX = 2**0+2**1+2**2+2**4+2**8+2**16+2**32
 gX = 2**0+2**1+2**3+2**7+2**15+2**31
 
-x = 4
+x = 9
 
 def encode(l, gX, n, hMatrix):    
     word = wg.generateWord(l)
@@ -41,6 +42,7 @@ def channel(r, dB, preChannel):
 def decode(hMatrix, quantWord, softReceived, originalString, y, n, iterTimes, type, x):
     si = dec.calculateSyndrom(hMatrix, quantWord)
     newWord = []
+    xTwo = 2**(x-1) - 1
     
     if sum(si) == 0 :
         return quantWord
@@ -62,8 +64,12 @@ def decode(hMatrix, quantWord, softReceived, originalString, y, n, iterTimes, ty
                 
         quantWord = newWord
         rj = newrj
-        ej = dec.getEJ(quantWord, hMatrix, si, n)       
-        newrj = dec.getRJ(rj, ej, y, quantWord)
+        ej = dec.getEJ(quantWord, hMatrix, si, n)   
+        if type == 'hard' :     
+            newrj = dec.getRJ(rj, ej, y, quantWord)
+        else :
+            newrj = dec.getRJ(rj, ej, y, quantWord)
+ 
         newWord = dec.flipBits(newrj)
        
     return newWord   
@@ -77,8 +83,14 @@ def compare(originalString, newWord, failures, tries):
 #    
 def plotter(samplesa, samplesb, db_steps):
     print(samplesa, samplesb, db_steps)
-    plt.plot(samplesa, db_steps, samplesb, db_steps)
+    plt.semilogy(db_steps, samplesa, label='hard-reliability')
+    plt.semilogy(db_steps, samplesb, label='soft-reliability')
+    plt.xlabel('Eb/N0 (dB)')
+    plt.ylabel('BER')
+    # Place a legend to the right of this smaller subplot.
+    plt.legend()
     #print(newWord)
+    plt.title("hard/soft reliability-based iterativer MLG")
     plt.savefig('foo.png')
     #plt.show()
     return    
@@ -92,9 +104,9 @@ def main(n, l, k, r, hX, gX, dbStart, dbEnd, dbStep, x):
     firstRow = hMatrix[:,0]
     y = np.count_nonzero(firstRow)  
     # For different iterTimes = 6
-    iterTimes = 6
+    iterTimes = 12
     #samplesize = 1000000
-    samplesize = 100
+    samplesize = 1000
     
     j = dbStart
     type = ['hard', 'soft']
@@ -105,6 +117,7 @@ def main(n, l, k, r, hX, gX, dbStart, dbEnd, dbStep, x):
         j = dbStart
         while j <= dbEnd :
             np.random.seed(23)
+            random.seed(23)
             failures = 0
             tries = 0
             dB = j    
@@ -121,7 +134,9 @@ def main(n, l, k, r, hX, gX, dbStart, dbEnd, dbStep, x):
             j = j + dbStep
             plotterpoints.append((failures/tries))
         allplots.append(plotterpoints)
+        print('is', type, plotterpoints)
     # STEP: Plot it
+    print('starting to plot')
     plotter(np.array(allplots[0]), np.array(allplots[1]), np.arange(dbStart, dbEnd+dbStep, dbStep))
     return
         

@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{bm}
+\usepackage{hyperref}
 
 \setcounter{MaxMatrixCols}{63}
 
@@ -62,6 +63,8 @@ Unter der Annahme, dass es sich bei der Beschreibung um einen primitiven BCH-Kod
 \textit{k} = grad\textit{g(x)} = 32
 mit \textit{d$_{min}$} = 7, daher benötigt der Kode \textit{d$_{min}$} - 1 = 6 aufeinanderfolgende Nullstellen
 
+Die Koderate beträgt R = $\frac{l}{n}$ = $\frac{31}{63}$
+
 Die Zyklen der Elemente des Erweiterungskörpers mit \textit{n} = \textit{p} = 63 sind \\
 
 $\alpha$$^{0}$ \\
@@ -84,11 +87,17 @@ Für die Bildung steht eine Menge an geeigneten Modularpolynomen zur Verfügung.
 
 Auf Basis des Modularpolynoms, ergeben sich die Liste der Polynomrestwerte und über die Elemente der Erweiterungskörper können die relevanten  Minimalpolynome m0 bis m31 definiert werden.
 
-% TODO: POLYNOMRESTWERTTABELLE
-% TODO: Modularpolynom und enthaltene Minimalpolynome
-% TODO: Evtl Aufeinanderfolgende Nullstellenfolgen
+Modularpolynom
+\[M(x) = x^{6}+x^{5}+1 \]
 
-
+mit u.A. \[m_{5}(x) = x^{6} + x^{5} + x^{2} + x + 1 , \]
+	\[m_{11}(x) = x^{6} + x^{5} + x^{3} + x^{2} + 1 ,\]	
+	\[m_{15}(x) = x^{6} + x^{5} + x^{4} + x^{2} + 1 ,\]	
+	\[m_{21}(x) = x^{2} + x + 1 ,\]
+	\[m_{23}(x) = x^{6} + x^{5} + x^{4} + x + 1 ,\]
+	\[m_{31}(x) = x^{6} + x^{5} + 1 \]
+	
+	
 
 \section{LDPC-Encoder}
 Der oben beschriebene BCH-Kode und entsprechend die aus ihm hervorgehende Kontrollmatrix bildet die Grundlage für einen LDPC-Code.
@@ -98,8 +107,21 @@ Da die zugrundeliegende Kontrollmatrix \textit{H} zyklisch ist, wird folgende Bi
 \[ a_{j} = \sum_{j′∈K_{i}\backslash_{j}} a_{j′}  mod  2 , (j = l + i, i = 1, 2, ..., k)  \]
 
 \section{Majority Logic-Decoder}
-Hier kommen Bilder und Erkenntnisse über den Decoder-Vorgang und Ergebnisse
+
+Für die Untersuchung des hard/soft-reliability MLG Decoder wurde ein Kanal mit AWGN-Rauschen implementiert und eine Sample-Größe von jeweils 10000 übertragenen Wörtern getestet.
+Die Rauschabstände wurden in 0,1 Schritten zwischen 1 und 8 dB gewählt. Abbildung \ref{fig:plot} zeigt die durchschnittliche Restfehlerwahrscheinlichkeit für den gegebenen Kode und maximal 12 Iterationen. Die soft-reliability wurde mit einer 9-Bit-Quantisierung umgesetzt. 
+
+Der soft-reliability iterative MLG bietet vor allem für kleinere Rauschabstände zwischen 4 und 8 dB Vorteile gegenüber dem hard-reliability iterative MLG von 0,5 bis dB. 
+
+\begin{figure}[hb]
+	\includegraphics[width=\linewidth]{foo.png}
+	\caption{Vergleich soft- und hard-reliability-based iterativer MLG}
+	\label{fig:plot}
+\end{figure}
 
 
+\paragraph{Anmerkungen} Während der Untersuchung fiel auf, dass die Anzahl der Quantisierungsstufen maßgeblich Einfluss auf die Korrektureigenschaft des soft-reliability iterative MLG hatte. Bei einer Menge an Quantisierungsstufen $x < y $ mit $y$ ist Spaltengewicht der Kontrollmatrix, ist das Dekodierverhalten teils schlechter, als beim hard-reliability iterative MLG.
+
+\paragraph{Umsetzung} Der Quellcode für die hier gezeigten Berechnungen ist auf github unter \url{https://github.com/Manonisch/Kanalkodierung} \href{https://github.com/Manonisch/Kanalkodierung}  abrufbar. Grundlage bildet Python mit den Bibliotheken Numpy und Matplotlib.
 
 \end{document}

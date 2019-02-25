@@ -112,7 +112,7 @@ cyclesAre = [[1,2,4,8,16,32], [3,6,12,24,48,33], [5,10,20,40,17,34], [7,14,28,56
 listPoly = [115, 109, 103, 97, 91, 67, ]
 gEntry = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,1]
 for item in listPoly :
-    print('MMMMMMMMMMMMMMMMMY ITEM', item)
+    print('MMMMMMMMMMMMMMMMMY ITEM', item, format(item, 'b'))
     restDict = restp(63,item)
     print(restDict)
     minimalPolynomList = getMinimalPolynoms(cyclesAre,63,restDict)
@@ -125,7 +125,7 @@ for item in listPoly :
     m31 = np.ravel(np.array(minimalPolynomList['m31(x)']))
     a = polly([1,2,3, 1, 1])
     ar = np.array(a)
-    # print('m5 is', m5,'m11 is', m11,'m15 is', m15,'m21 is', m21,'m23 is', m23,'m31 is', m31, 'and then', minimalPolynomList['m5(x)'], a, a*a, ar)
+    print('m5 is', m5,'m11 is', m11,'m15 is', m15,'m21 is', m21,'m23 is', m23,'m31 is', m31, 'and then', minimalPolynomList['m5(x)'], a, a*a, ar)
     gX = m5
     lister = [m11,m15,m21,m23, m31]
     for elem in lister :
