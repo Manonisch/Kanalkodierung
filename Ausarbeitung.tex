@@ -106,7 +106,45 @@ Da die zugrundeliegende Kontrollmatrix \textit{H} zyklisch ist, wird folgende Bi
 
 \[ a_{j} = \sum_{j′∈K_{i}\backslash_{j}} a_{j′}  mod  2 , (j = l + i, i = 1, 2, ..., k)  \]
 
-\section{Majority Logic-Decoder}
+\section{Korrektur Majority-Logic Decoder}
+
+Die ist ein Anhang zur bisherigen Version des Dekoders. Im vorigen Absatz wurde ein fehlerhafter Encoder und Decodierer eingesetzt. Zudem wurden kleinere Fehler bei Modulierer und Demodulierer behoben.
+
+\paragraph{Korrektur} 
+
+Mit der korrigierten Version des Programmes wurde ein Kanal mit AWGN-Rauschen mit 2 bis 8dB Rauschabstand eingesetzt und eine Sample-Größe von jeweils 10000 übertragenen Wörtern getestet. \\
+
+Die Rauschabstände wurden in 0,1 Schritten zwischen 1 und 8 dB gewählt. Abbildung \ref{fig:plot2} zeigt die durchschnittliche Restfehlerwahrscheinlichkeit für den gegebenen Kode und maximal 6 Iterationen. \\
+
+\begin{figure}[ht]
+	\includegraphics[width=\linewidth]{foo3.png}
+	\caption{Revised - Vergleich soft- und hard-reliability-based iterativer MLG}
+	\label{fig:plot2}
+\end{figure}
+
+
+\newpage
+
+Die Leistungsfähigkeit des Kodes wurde für maximale Iterationen zwischen 2 und 10 Iterationsschritten getestet. Wie in Abbildung \ref{fig:iter} zu sehen, ist der Dekodierunsgewinn ab etwa 6 Iterationsschritten vernachlässigbar.\\
+
+Die soft-reliability wurde mit einer angepassten 4-Bit-Quantisierung umgesetzt. Für diese ergibt sich $ 2^{x-1} - 1 = 2^{3} - 1 = 7 $.\\
+
+\begin{figure}[ht]
+	\includegraphics[width=\linewidth]{iter.png}
+	\caption{Vergleich Dekodierverhalten hard-reliability-based iterativer MLG mit 2-10 Iterationsstufen}
+	\label{fig:iter}
+\end{figure} 
+
+\paragraph{Auswertung}
+
+Der soft-reliability iterative MLG bietet einen generellen Kodierungsgewinn von etwa 1 dB gegenüber dem hard-reliability iterative MLG.
+
+\section{Umsetzung} Der Quellcode für die hier gezeigten Berechnungen ist auf github unter \url{https://github.com/Manonisch/Kanalkodierung} \href{https://github.com/Manonisch/Kanalkodierung}  abrufbar. Grundlage bildet Python mit den Bibliotheken Numpy und Matplotlib.
+
+
+\section{Veraltet: Majority Logic-Decoder}
+
+Anmerkung: dieser Abschnitt ist veraltet und dient lediglich als Refernen für den Abschnitt 'Korrektur Majority-Logic Decoder'.
 
 Für die Untersuchung des hard/soft-reliability MLG Decoder wurde ein Kanal mit AWGN-Rauschen implementiert und eine Sample-Größe von jeweils 10000 übertragenen Wörtern getestet.
 Die Rauschabstände wurden in 0,1 Schritten zwischen 1 und 8 dB gewählt. Abbildung \ref{fig:plot} zeigt die durchschnittliche Restfehlerwahrscheinlichkeit für den gegebenen Kode und maximal 12 Iterationen. Die soft-reliability wurde mit einer 9-Bit-Quantisierung umgesetzt. 
@@ -115,13 +153,14 @@ Der soft-reliability iterative MLG bietet vor allem für kleinere Rauschabständ
 
 \begin{figure}[hb]
 	\includegraphics[width=\linewidth]{foo.png}
-	\caption{Vergleich soft- und hard-reliability-based iterativer MLG}
+	\caption{veraltet: Vergleich soft- und hard-reliability-based iterativer MLG auf alter Programmbasis}
 	\label{fig:plot}
 \end{figure}
 
 
-\paragraph{Anmerkungen} Während der Untersuchung fiel auf, dass die Anzahl der Quantisierungsstufen maßgeblich Einfluss auf die Korrektureigenschaft des soft-reliability iterative MLG hatte. Bei einer Menge an Quantisierungsstufen $x < y $ mit $y$ ist Spaltengewicht der Kontrollmatrix, ist das Dekodierverhalten teils schlechter, als beim hard-reliability iterative MLG.
+\paragraph{Anmerkungen} Während der Untersuchung fiel auf, dass die Anzahl der Quantisierungsstufen maßgeblich Einfluss auf die Korrektureigenschaft des soft-reliability iterative MLG hatte. Bei einer Menge an Quantisierungsstufen $x < \gamma $ mit $\gamma$ ist Spaltengewicht der Kontrollmatrix, war das Dekodierverhalten teils schlechter, als beim hard-reliability iterative MLG.
 
-\paragraph{Umsetzung} Der Quellcode für die hier gezeigten Berechnungen ist auf github unter \url{https://github.com/Manonisch/Kanalkodierung} \href{https://github.com/Manonisch/Kanalkodierung}  abrufbar. Grundlage bildet Python mit den Bibliotheken Numpy und Matplotlib.
+Wie im Graph zu sehen, liefert der Hard-reliability Algorithmus oberhalb eines Rauschabstandes von 6 DB konstante Werte an Restfehlerwahrscheinlichkeit ab, anstatt, wie erwartet gegen 0 zu gehen. Dieses Verhalten kann m.M.n. entweder auf einen bis dato unerkannten Fehler im Algorithmus oder aber auf das Auftreten eines ungünstigen Fehlermusters durch die Struktur der gegebenen Kontrollmatrix zurückgeführt werden. 
+
 
 \end{document}

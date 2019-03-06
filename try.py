@@ -30,7 +30,7 @@ gX = 2**0+2**4+2**6+2**7+2**8
 print(hX,  bin(hX), gX, bin(gX),)
 # = x8 +x7 +x6 +x4 + 1 == 1 + 16 + 64 + 128 + 256
 dB = 6
-np.random.seed(23)
+np.random.seed(25)
 
 hMatrix = dec.getMatrix(hX, n)
 print('hMatrix', hMatrix, hX, n)

@@ -19,13 +19,21 @@ def getMatrix(hX, n):
     
 def calculateSyndrom(hMatrix, word):
     newWord =  np.asarray(word)
-    syndrom = hMatrix @ word
-    i = 0
-    syndrom =  syndrom.astype(int)
-    lenw = len(word)
-    while i < lenw :
-        syndrom[i] = syndrom[i]%2
-        i = i + 1
+    newWord = newWord.astype(int)
+    #syndrom = hMatrix @ word
+    #syndrom =  syndrom.astype(int)
+    #for i in range(0, len(word)) :
+    #    syndrom[i] = syndrom[i]%2
+
+    syndrom = []
+    for i in range(0, len(word)) :
+        sumelem = 0
+        indexes, = np.where(hMatrix[i,:] == 1)
+        for ind in indexes :
+            sumelem = sumelem + newWord[ind]
+        sumelem = sumelem % 2
+        syndrom.append(sumelem)
+
     return syndrom
 
 def getRjHard(word, y) :
@@ -45,19 +53,19 @@ def getRjSoft(word, x) :
             newbit = -1
         elif newbit > 1 :
             newbit = 1
-        rj.append(-round(newbit * (2**(x-1) - 1), 0))
+        rj.append(round(newbit * (2**(x-1) - 1), 0))
     return rj
 
 def getEJ(word, hMatrix, si, n):
-    i = 0
+
     ej = []
-    while i < n :
+    for i in range(0, n) :
         sumelem = 0
         indexes, = np.where(hMatrix[:,i] == 1)
         for ind in indexes :
             sumelem = sumelem + (2 * ( word[i] ^ si[ind] ) - 1)
         ej.append(sumelem)
-        i = i + 1
+
     return ej
 
 def getRJ(rj, ej, y, word) :
@@ -78,16 +86,16 @@ def flipBits(rj) :
     return newWord
     
 def calculateSyndromSecond(hMatrix, word, si, n):
-    i = 0
+
     syndrom = []
-    while i < n :
+    for i in range(0, n) :
         sumelem = 0
         indexes, = np.where(hMatrix[i,:] == 1)
         for ind in indexes :
             sumelem = sumelem + ( word[ind] ^ si[i] )
         sumelem = sumelem % 2
         syndrom.append(sumelem)
-        i = i + 1
+
     return syndrom
 
     # TODO: NOT NEEDED

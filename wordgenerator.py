@@ -3,9 +3,10 @@ import binary
 import numpy 
 import numpy.random as nprnd
 import matplotlib.pyplot as plt
+import math
  
 def generateWord(l) :
-    return randint(1, 2**l-1)   
+    return randint(1, (2**l) - 1)   
 
 def encodeBCHWord(word, gX, l, n) : 
     encodedWord = word 
@@ -22,23 +23,19 @@ def encodeLDPCWord(word, gX, hMatrix, l, n) :
     wordly =  format(shiftWord, 'b')
     for bit in wordly :
         wordArray.append(int(bit))
-       
+
     if len(wordArray) < n :
-        j = n - len(wordArray)
-        i = 0
-        while i < j :
+        for i in range(0, (n - len(wordArray))) :
             wordArray.insert(0, 0)
-            i = i + 1
-    j = 0
-   
-    while j < k :
+
+    for j in range(0, k) :    
         # For Rows
         indexes, = numpy.where(hMatrix[j,:] == 1)
         sumelem = 0
         for ind in indexes :
             sumelem = sumelem + wordArray[ind]
         wordArray[l+j] = sumelem % 2
-        j = j + 1
+
     encodedWord = wordArray
     return encodedWord    
 
@@ -51,10 +48,12 @@ def addNoise(word, mean, noiseRange) :
     return newWord
 
 def quant (element) :
-    if element >= 0 :
+    if element > 0 :
+        element = 0
+    elif  element < 0 :
         element = 1
-    else :
-        element = 0     # FOR LATER
+    elif element == 0 :
+        element = 1
     return element    
     
 # STEP: Quantisation -> Flip Bit    
@@ -75,12 +74,6 @@ def softQuantMLG(word) :
     quantWord = [quantSoftMLG(elem) for elem in quantWord]
     return quantWord    
 
- #TODO: NOT FINISHED; NOT NEEDED
-def stepQuant(word, steps) :
-    quantWord = word
-    quantSteps = numpy.linspace(0.0,1.0, steps+1)
-    return quantWord
-
 def softQuant (word) :
     quantWord = word
     return quantWord    
@@ -91,7 +84,9 @@ def dequantiseHard(word, n) :
     for bit in prepared : 
         newWord = int(bit)
         if newWord == 0 :
-            newWord = -1
+            newWord = 1.0
+        elif newWord == 1 :
+            newWord = -1.0
         prepareArray.append(newWord)
     return prepareArray
 
@@ -101,15 +96,9 @@ def getCodeRate(l, gx) :
     return codeRate
     
 def getNoiseRatio(r, db) :
-    # Set a target channel noise power to something very noisy
-    #target_noise_db = db
-
-    # Convert to linear Watt units
-    #target_noise_watts = 10 ** (target_noise_db / 10)
-
     noise = 1/ (2*r*(10**(db/10)))
+    noise = math.sqrt(noise) 
     return noise
-    #return numpy.sqrt(target_noise_watts)
     
 # TODO NOT NEEDED    
 def wordAtChannel(l,gX, dB, rate, n) :
@@ -123,7 +112,3 @@ def wordAtChannel(l,gX, dB, rate, n) :
     quantReceived = hardQuant(softReceived)
     
 # testcases
-i = 18
-word = 12
-l = 13
-a = 12345
