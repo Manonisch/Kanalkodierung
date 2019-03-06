@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import math
  
 def generateWord(l) :
-    return randint(1, (2**l) - 1)   
+    return randint(0, (2**l) - 1)   
 
 def encodeBCHWord(word, gX, l, n) : 
     encodedWord = word 
