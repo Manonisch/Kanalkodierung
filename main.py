@@ -103,14 +103,23 @@ def plotterIterHard(samples, db_steps):
 
     plt.xlabel('Eb/N0 (dB)')
     plt.ylabel('BER')
-    # Place a legend to the right of this smaller subplot.
     plt.legend()
-    #print(newWord)
     plt.title("hard/soft reliability-based iterativer MLG - testing iteration times for hard")
     plt.savefig('iter.png')
-    #plt.show()
     return    
-    
+
+def plotterXsoft(samples, db_steps):
+    print(samples, db_steps)
+
+    for i in range(0, len(samples)):
+        txt = ' ' + str(i+2) + ' -Bit Quantisierung'
+        plt.semilogy(db_steps, samples[i], label=txt)
+
+    plt.xlabel('Eb/N0 (dB)')
+    plt.ylabel('BER')
+    plt.legend()
+    plt.savefig('x.png')
+    return        
     
 def main(n, l, k, hX, gX, dbStart, dbEnd, dbStep, x):
 
@@ -125,17 +134,18 @@ def main(n, l, k, hX, gX, dbStart, dbEnd, dbStep, x):
     # For different iterTimes = 6
     iterTimes = 6
     #samplesize = 1000000
-    samplesize = 10000
+    samplesize = 1000
     
     r = l/n    
     j = dbStart
-    type = ['hard', 'soft', 'no']
-    #type = ['hard']
+    #type = ['hard', 'soft', 'no']
+    type = ['soft']
     allplots = []
     #for iterTimes in range(2, 11) :
-    for types in type :
-    #    types = type[0]
-        print(types, iterTimes)
+    for x in range(2, 10) :
+    #for types in type :
+        types = type[0]
+        print(types, iterTimes, x)
         plotterpoints = []
         j = dbStart
         while j <= dbEnd :
@@ -179,8 +189,9 @@ def main(n, l, k, hX, gX, dbStart, dbEnd, dbStep, x):
     # STEP: Plot it
     print('starting to plot')
     #plotter(np.array(allplots[0]), np.array(allplots[1]), np.arange(dbStart, dbEnd+dbStep, dbStep))
-    plotter(np.array(allplots[0]), np.array(allplots[1]), np.array(allplots[2]), np.arange(dbStart, dbEnd+(dbStep), dbStep))
+    #plotter(np.array(allplots[0]), np.array(allplots[1]), np.array(allplots[2]), np.arange(dbStart, dbEnd+(dbStep), dbStep))
     #plotterIterHard(allplots, np.arange(dbStart, dbEnd+(dbStep), dbStep))
+    plotterXsoft(allplots, np.arange(dbStart, dbEnd+(dbStep), dbStep))
     return
         
 main(n, l, k, hX, gX, 1, 8, 0.1, x)   

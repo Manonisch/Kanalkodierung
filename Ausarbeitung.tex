@@ -127,11 +127,17 @@ Die Rauschabstände wurden in 0,1 Schritten zwischen 1 und 8 dB gewählt. Abbild
 
 Die Leistungsfähigkeit des Kodes wurde für maximale Iterationen zwischen 2 und 10 Iterationsschritten getestet. Wie in Abbildung \ref{fig:iter} zu sehen, ist der Dekodierunsgewinn ab etwa 6 Iterationsschritten vernachlässigbar.\\
 
-Die soft-reliability wurde mit einer angepassten 4-Bit-Quantisierung umgesetzt. Für diese ergibt sich $ 2^{x-1} - 1 = 2^{3} - 1 = 7 $.\\
+Die soft-reliability wurde mit einer angepassten 4-Bit-Quantisierung umgesetzt. Für diese ergibt sich $ 2^{x-1} - 1 = 2^{3} - 1 = 7 $. Eine Untersuchung möglicher Quantisierungsstufen für die gegebene Kodebeschreibung ergab ein optimales Dekodierverhalten für 4-Bit-Quantisierungen. Aber auch eine 3- oder 5-Bit Quantisierung wäre einsetzbar. Dagegen schneiden höhere Quantisierungsstufen zunehmend schlechter ab, da diese im Verhältnis zu $\gamma$ von $e_{j}$ stark abweichen und mehr Iterationen benötigen um ein Kippen von fehlerhaften Bits zu erreichen. Die entsprechenden Werte sind in Abbildung \ref{fig:xplot} zu betrachten.  \\
 
 \begin{figure}[ht]
 	\includegraphics[width=\linewidth]{iter.png}
 	\caption{Vergleich Dekodierverhalten hard-reliability-based iterativer MLG mit 2-10 Iterationsstufen}
+	\label{fig:iter}
+\end{figure} 
+
+\begin{figure}[ht]
+	\includegraphics[width=\linewidth]{x.png}
+	\caption{Vergleich Dekodierverhalten soft-reliability-based iterativer MLG mit steigenden Quantisierungswerten für $r_{0}$}
 	\label{fig:iter}
 \end{figure} 
 
